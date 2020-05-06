@@ -1,4 +1,4 @@
-# sonar
+# Sonar
 
 A simple sonar system made in p5.js
 
