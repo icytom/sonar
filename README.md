@@ -12,5 +12,7 @@ If a click is regestered on a white pixel from the image map no particles are ge
 
 Image map is currently set to the UK
 
+![https://github.com/icytom/sonar/blob/master/uk_map.png?raw=true](uk image map)
+
 
 [https://icytom.github.io/sonar/](https://icytom.github.io/sonar/)
