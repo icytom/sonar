@@ -3,12 +3,12 @@ let pulses = [];
 let collition_map;
 
 function preload() {
-  collition_map = loadImage('collition_map.jpg');
+  collition_map = loadImage('uk_map.png');
 }
 
 function setup() {
-  // put setup code here
-  createCanvas(500, 500);
+  // put setup code here  
+  createCanvas(collition_map.width, collition_map.height);
   angleMode(DEGREES);
   collition_map.loadPixels();
   background("black");
