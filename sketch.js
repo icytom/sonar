@@ -1,6 +1,7 @@
 
 let pulses = [];
 let collition_map;
+let noice = 0; //0.01
 
 function preload() {
   collition_map = loadImage('uk_map.png');
@@ -15,11 +16,20 @@ function setup() {
 }
 
 function draw() {
-  background(0, 15, 0, 90);
+  background(0, 15, 0, 80);
   for (let pulse in pulses) {
     pulses[pulse].update();
     pulses[pulse].draw();
   }
+}
+
+function removePulse(pulseToRemove){
+	for (let pulse in pulses) {
+		if(pulses[pulse] == pulseToRemove){
+			 this.pulses.splice(pulse, 1);
+			break;
+		}
+	}
 }
 
 /**
@@ -44,19 +54,31 @@ class Pulse {
     this.maxParticles = 100;              // Total number of particles in the pulse
     this.particles = [];                  // Array to hold all particles
 
-    for (let i = 0; i < this.maxParticles; i++) {
+	//check if pulse collids instantly
+	//find index of pixel on collition_map under particle
+    let pix = 4 * ((round(this.pos.y) * width) + round(this.pos.x));
 
-      // Evenly spread initial direction of particles 
-      let angle = (360 / this.maxParticles) * i;
-      let dir = createVector(0, 1);
-      dir.rotate(angle);
+	//if pixel is white, particle has collided ( or random noice)
+	if (collition_map.pixels[pix] == "255") {
+		removePulse();
+	}else{
+		
+		for (let i = 0; i < this.maxParticles; i++) {
 
-      // Make copy of Pulse position for each particle
-      let posCopy = this.pos.copy();
+		  // Evenly spread initial direction of particles 
+		  let angle = (360 / this.maxParticles) * i;
+		  let dir = createVector(0, 1);
+		  dir.rotate(angle);
 
-      //create new particle and put it in array
-      this.particles.push(new Particle(posCopy, dir, this));
-    }
+		  // Make copy of Pulse position for each particle
+		  let posCopy = this.pos.copy();
+
+		  //create new particle and put it in array
+		  this.particles.push(new Particle(posCopy, dir, this));
+		}
+	}
+	
+	
   }
 
   /**
@@ -81,13 +103,21 @@ class Pulse {
    * Remove particle from pulse
    * @param {Particle} particleToRemove 
    */
-  removeMe(particleToRemove) {
+  removeParticle(particleToRemove) {
     for (let particle in this.particles) {
       if (this.particles[particle] == particleToRemove) {
         this.particles.splice(particle, 1);
         break;
       }
     }
+	
+	if(this.particles.length <= 0){
+		removePulse();
+	}
+  }
+  
+  removePulse(){
+	removePulse(this);
   }
 
 }
@@ -125,7 +155,7 @@ class Particle {
       let pix = 4 * ((round(this.position.y) * width) + round(this.position.x));
 
       //if pixel is white, particle has collided ( or random noice)
-      if ((collition_map.pixels[pix] == "255") || (random() < 0.01)) {
+      if ((collition_map.pixels[pix] == "255") || (random() < noice)) {
         this.hit = true;
       }
 
@@ -138,8 +168,11 @@ class Particle {
 
     //delete particle if no life left
     if (this.life <= 0) {
-      this.pulse.removeMe(this);
-    }
+      this.pulse.removeParticle(this);
+    }else if(this.position.y <0 || this.position.x < 0 || this.position.y > height || this.position.x > width){ //check if left canvas
+		this.pulse.removeParticle(this);
+	}
+	
   }
 
   /**
@@ -148,10 +181,10 @@ class Particle {
   draw() {
     if (this.hit) {
       stroke(50, 255, 50, this.life / 5);
-      strokeWeight(2); // Make the points 10 pixels in size
+      strokeWeight(3); // Make the points 10 pixels in size
     } else {
       stroke(255, 255, 255, 100);
-      strokeWeight(2); // Make the points 10 pixels in size
+      strokeWeight(3); // Make the points 10 pixels in size
     }
 
     point(this.position.x, this.position.y);
