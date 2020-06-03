@@ -6,7 +6,7 @@ A simple sonar system made in p5.js
 
 May eventually turn into a submarine hunting game
 
-Clicks on the cavas generate a pulse of particles move out from the location of the mouse click,when they detect white pixels on a collition map image they stop.
+Clicks on the canvas generate a pulse of particles which move out from the location of the mouse click, when they detect white pixels on a collition map image they stop.
 
 Over time the particles fade out
 
