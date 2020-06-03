@@ -4,7 +4,7 @@ A simple sonar system made in p5.js
 
 [https://icytom.github.io/sonar/](https://icytom.github.io/sonar/)
 
-May eventually turn into a submarine huntting game
+May eventually turn into a submarine hunting game
 
 Clicks on the cavas generate a pulse of particles move out from the location of the mouse click,when they detect white pixels on a collition map image they stop.
 
